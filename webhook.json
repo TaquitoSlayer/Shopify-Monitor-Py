@@ -1,0 +1,20 @@
+{
+    "undefeated": {
+        "webhook": [
+            "https://discordapp.com/api/webhooks/550732233657548802/UPzf-J8p7QifbWcd_E2m93Jd2cNBSbQvgvcAHZu0s5iguWoQhK0N5z4mRM9D-NOmmU6M",
+            "https://discordapp.com/api/webhooks/550732638097375253/7Rc0WBRj6o9XCHgnYcIEa4TF0Qohluu7I306GTsAGokq69BjwpX3XdR1X39f9-wxBbVC"
+        ]
+    },
+    ".": {
+        "webhook": [
+            "https://discordapp.com/api/webhooks/473305424033087498/LYAfosEA-lgsTljAdnNZ0bLAFSfzObrrWLPANwPQvHburHaJeWcJMmsZoAimC5rj3r3p"
+        ]
+    },
+    "funko": {
+        "webhook": [
+            "https://discordapp.com/api/webhooks/530818315279663105/wsRmjh4d-wasZxhyPCXfT6eA5Qtg_DGz-XI5XkBCQrNSF4Zt_pKezsrPFjUMHLXELcbn",
+            "https://discordapp.com/api/webhooks/542041034901946388/jZ2CSJOjOvOFJ1_9Rr1vTue9oGTD0nt88F6HKZBqw6Rxu1oY-VIxb5ITIL9FQSFu1G1C",
+            "https://discordapp.com/api/webhooks/482267848262287360/URRklxg1-Vn9Ooq1OedywnE0HyizyUZLD6jv9GJ4WbPIkBJbJdmjpM3ZmXwMq_skAP1v"
+        ]
+    }
+}
