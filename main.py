@@ -81,7 +81,6 @@ def channel_fill():
         try:
             proxy_picked = proxyhandler.proxy()
             for site in sites:
-                print(site)
                 initial_product_list = products.List(site, proxy_picked)
                 for product in initial_product_list:
                     post_to_discord(product)
@@ -93,15 +92,22 @@ def channel_fill():
             pass
 
 def monitor(url, proxy, lock, task_num):
-    try:
-        initial_product_list = products.List(url, proxy)
-    except requests.exceptions.RequestException:
-            #logging.info(f'{url.upper()} - {task_num}: ERROR: ' + err)
-            pass
-
-    while True:
+    fucked = False
+    while not fucked:
         try:
-            new_product_list = products.List(url, proxy)
+            proxy_picked = proxyhandler.proxy()
+            initial_product_list = products.List(url, proxy_picked)
+            fucked = True
+        except requests.exceptions.RequestException:
+                #logging.info(f'{url.upper()} - {task_num}: ERROR: ' + err)
+                pass
+
+    fucked_new = False
+    while not fucked_new:
+        try:
+            proxy_picked = proxyhandler.proxy()
+            new_product_list = products.List(url, proxy_picked)
+            fucked_new = True
         except requests.exceptions.RequestException:
             #logging.info(f'{url.upper()} - {task_num}: ERROR: ' + err)
             pass

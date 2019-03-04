@@ -22,6 +22,7 @@ def List(url, proxy):
         product_urls.append(product_url)
     return product_urls
 
+
 def get_info(url, proxy):
     variants = {}
     resp = r.get(url, headers = headers, proxies={"http": proxy, "https": proxy})
