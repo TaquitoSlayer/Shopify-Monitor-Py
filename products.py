@@ -22,9 +22,9 @@ def List(url, proxy):
         product_urls.append(product_url)
     return product_urls
 
-def get_info(url):
+def get_info(url, proxy):
     variants = {}
-    resp = r.get(url, headers = headers)
+    resp = r.get(url, headers = headers, proxies={"http": proxy, "https": proxy})
     stock = 'N/A'
     image = 'https://i.imgur.com/PheG08Z.jpg'
     title = 'NO NAME FOUND'
@@ -62,30 +62,12 @@ def get_info(url):
         print(e)
         pass
     try:
-        variantz = resp_json['product']['variants']
-        if 'undefeated' in url:
-            tags = resp_json['product']['tags']
-            tags = re.findall(r'''size_(.*)?, size_''', tags)
-            tags = tags[0].replace('size_', '')
-            tags = tags.replace('-', '.')
-            tags = tags.replace(' ', '')
-            tags = tags.split(',')
-            for variant in variantz:
-                for tag in tags:
-                    if tag in variant['option2']:
-                        vid = variant['id']
-                        name = variant['title']
-                        variants[vid] = name
-                    else:
-                        pass               
-        else:
-            for variant in variantz:
-                vid = variant['id']
-                name = variant['title']
-                variants[vid] = name
+        variantz = resp_json['product']['variants']             
+        for variant in variantz:
+            vid = variant['id']
+            name = variant['title']
+            variants[vid] = name
     except Exception as e:
         print(f'ERROR: {e}')
         variants = {"NO ATC LINK FOUND" : "YOU-PLAYED-YOURSELF"}
     return title, image, stock, price, url, variants
-
-print(get_info('https://undefeated.com/products/powerphase-cloudwhite-offwhite'))
