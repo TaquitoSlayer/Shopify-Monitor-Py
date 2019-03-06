@@ -5,7 +5,7 @@ import proxyhandler
 from multiprocessing import Process, Lock
 import time
 import json
-from discord_hooks import Webhook
+from dhooks import Webhook
 from urllib.parse import urlparse
 import re
 
@@ -57,7 +57,7 @@ def post_to_discord(product_url):
                         print(webhookz)
                         for webhook in webhookz:
                             embed = Webhook(webhook, color=1118481)
-                            embed.set_desc(f'[{title}]({product_url})')
+                            embed.set_description(f'[{title}]({product_url})')
                             embed.add_field(name='Price',value='{}'.format(price))
                             links = []
                             for vid, titlez in variants.items():
