@@ -13,13 +13,21 @@ def generate_sitelist():
 def List(url, proxy):
     product_urls = []
     json_url = 'https://' + url + '/products.json?from=135297231&to=2035543867467'
-    dump = r.get(json_url, headers = headers, proxies={"http": proxy, "https": proxy})
-    json_dump = dump.json()
-    products = json_dump['products']
-    for product in products:
-        placeholder = product['handle']
-        product_url = 'https://' + url + '/products/' + placeholder
-        product_urls.append(product_url)
+    fucked = True
+    while not fucked:
+        try:
+            dump = r.get(json_url, headers = headers, proxies={"http": proxy, "https": proxy})
+            json_dump = dump.json()
+            print(json_dump)
+            products = json_dump['products']
+            for product in products:
+                placeholder = product['handle']
+                product_url = 'https://' + url + '/products/' + placeholder
+                product_urls.append(product_url)
+
+            fucked = False
+        except:
+            print('Product list not obtained, trying again')
     return product_urls
 
 
