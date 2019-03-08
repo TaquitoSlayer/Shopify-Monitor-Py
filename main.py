@@ -136,9 +136,9 @@ def main(task_num, url, lock, delay):
             time.sleep(float(delay))
             pass
 
-# if __name__ == '__main__':
-#     lock = Lock()
-#     for site in sites:
-#         for i in range(int(tasks)):
-#             p = Process(target=main, args=(i+1, site, lock, delay))
-#             p.start() # starting workers
+if __name__ == '__main__':
+    lock = Lock()
+    for site in sites:
+        for i in range(int(tasks)):
+            p = Process(target=main, args=(i+1, site, lock, delay))
+            p.start() # starting workers
