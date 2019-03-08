@@ -70,6 +70,7 @@ def post_to_discord(product_url):
                     embed.set_thumbnail(image)
                     embed.set_footer(text=f'Shopify Monitor by @TaquitoSlayer | {result}')
                     client.send(embeds=[embed])
+                    embed.fields.clear()
 
 def channel_fill():
     fucked = False
@@ -87,18 +88,19 @@ def channel_fill():
             print(e)
             time.sleep(float(delay))
             pass
+    
 
 def monitor(url, proxy, lock, task_num):
     try:
         initial_product_list = products.List(url, proxy)
-    except requests.exceptions.RequestException:
-        # logging.info(f'{url.upper()} - {task_num} - {task_num}: ERROR: ' + err)
+    except requests.exceptions.RequestException as err:
+        logging.info(f'{url.upper()} - {task_num} - {task_num}: ERROR: ' + err)
         pass
     while True:
         try:
             new_product_list = products.List(url, proxy)
         except requests.exceptions.RequestException as err:
-            # logging.info(f'{url.upper()} - {task_num} - {task_num}: ERROR: ' + err)
+            logging.info(f'{url.upper()} - {task_num} - {task_num}: ERROR: ' + err)
             pass
 
         diff = list(set(new_product_list) - set(initial_product_list))
@@ -134,9 +136,9 @@ def main(task_num, url, lock, delay):
             time.sleep(float(delay))
             pass
 
-if __name__ == '__main__':
-    lock = Lock()
-    for site in sites:
-        for i in range(int(tasks)):
-            p = Process(target=main, args=(i+1, site, lock, delay))
-            p.start() # starting workers
+# if __name__ == '__main__':
+#     lock = Lock()
+#     for site in sites:
+#         for i in range(int(tasks)):
+#             p = Process(target=main, args=(i+1, site, lock, delay))
+#             p.start() # starting workers
