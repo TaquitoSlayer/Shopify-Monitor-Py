@@ -23,52 +23,105 @@ def List(url, proxy):
     return product_urls
 
 
+
+
+# def get_info(url, proxy):
+#     variants = {}
+#     resp = r.get(url, headers = headers, proxies={"http": proxy, "https": proxy})
+#     stock = 'N/A'
+#     image = 'https://i.imgur.com/PheG08Z.jpg'
+#     title = 'NO NAME FOUND'
+#     price = 'N/A'
+    
+#     try:
+#         stock = re.findall(r'''"inventory_quantity":(\d*),''', resp.text)
+#         stock = stock[0]
+#     except:
+#         pass
+#     try:
+#         jsonurl = url + '.js'
+#         resp_json = r.get(jsonurl, headers = headers)
+#         resp_json = json.loads(resp_json.text)
+#     except:
+#         print('ERROR LOADING PRODUCT JSON')
+#         pass
+
+#     try:
+#         images = resp_json['product']['images']
+#         images = images[0]
+#         image = images['src']
+#     except:
+#         pass
+    
+#     try:
+#         title = resp_json['product']['title']
+#     except:
+#         pass
+#     try:
+#         prices = resp_json['product']['variants']
+#         for price in prices:
+#             price = price['price']
+#     except Exception as e:
+#         print(e)
+#         pass
+#     try:
+#         variantz = resp_json['product']['variants']             
+#         for variant in variantz:
+#             vid = variant['id']
+#             name = variant['title']
+#             variants[vid] = name
+#     except Exception as e:
+#         print(f'ERROR: {e}')
+#         variants = {"N" : "A"}
+#     return title, image, stock, price, url, variants
 def get_info(url, proxy):
+    url = url.replace('#restock', '')
     variants = {}
     resp = r.get(url, headers = headers, proxies={"http": proxy, "https": proxy})
-    stock = 'N/A'
-    image = 'https://i.imgur.com/PheG08Z.jpg'
-    title = 'NO NAME FOUND'
-    price = 'N/A'
-    
+    # resp = r.get(url, headers = headers)
     try:
         stock = re.findall(r'''"inventory_quantity":(\d*),''', resp.text)
         stock = stock[0]
     except:
+        stock = 'N/A'
         pass
     try:
-        jsonurl = url + '.json'
-        resp_json = r.get(jsonurl, headers = headers)
+        jsonurl = url + '.js'
+        resp_json = r.get(jsonurl, headers = headers, proxies={"http": proxy, "https": proxy})
         resp_json = json.loads(resp_json.text)
     except:
         print('ERROR LOADING PRODUCT JSON')
         pass
 
     try:
-        images = resp_json['product']['images']
-        images = images[0]
-        image = images['src']
+        image = resp_json['images'][0]
+        image = f'https:{image}'
     except:
+        image = 'https://i.imgur.com/PheG08Z.jpg'
         pass
     
     try:
-        title = resp_json['product']['title']
+        title = resp_json['title']
     except:
+        title = 'NO NAME FOUND'
         pass
     try:
-        prices = resp_json['product']['variants']
+        prices = resp_json['variants']
         for price in prices:
             price = price['price']
     except Exception as e:
         print(e)
+        price = 'N/A'
         pass
     try:
-        variantz = resp_json['product']['variants']             
+        variantz = resp_json['variants']             
         for variant in variantz:
-            vid = variant['id']
-            name = variant['title']
-            variants[vid] = name
+            if variant['available'] == True:
+                vid = variant['id']
+                name = variant['title']
+                variants[vid] = name
+            else:
+                pass
     except Exception as e:
         print(f'ERROR: {e}')
-        variants = {"NO ATC LINK FOUND" : "YOU-PLAYED-YOURSELF"}
     return title, image, stock, price, url, variants

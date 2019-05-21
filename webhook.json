@@ -1,20 +1,27 @@
 {
     "undefeated": {
         "webhook": [
-            "https://discordapp.com/api/webhooks/550732233657548802/UPzf-J8p7QifbWcd_E2m93Jd2cNBSbQvgvcAHZu0s5iguWoQhK0N5z4mRM9D-NOmmU6M",
-            "https://discordapp.com/api/webhooks/550732638097375253/7Rc0WBRj6o9XCHgnYcIEa4TF0Qohluu7I306GTsAGokq69BjwpX3XdR1X39f9-wxBbVC"
+            "https://discordapp.com/api/webhooks/579703809543241778/7-EVfTSz6mUJPWUg4XdE1nOHUXd8OgiQOiDkLyqGTHXGznUzZFr8Z5dT5aP4S2q0gDiw"
         ]
     },
     ".": {
         "webhook": [
-            "https://discordapp.com/api/webhooks/550733084169994255/a9fQT5I56oXxVHUSjGYRoLLp_MOFQ_8bCn0u3EsPY3MqC_TiQRJwnwgF5t5A8ybuABSK"
+            "https://discordapp.com/api/webhooks/579703556030857247/dHl2t7_R4y0xp9XETDjOSYuZjkk-WK4esPH81K-XnQyAn4z6xqqZFGlxnm3_lYmgoOFO"
         ]
     },
-    "funko": {
+    "restock": {
         "webhook": [
-            "https://discordapp.com/api/webhooks/530818315279663105/wsRmjh4d-wasZxhyPCXfT6eA5Qtg_DGz-XI5XkBCQrNSF4Zt_pKezsrPFjUMHLXELcbn",
-            "https://discordapp.com/api/webhooks/542041034901946388/jZ2CSJOjOvOFJ1_9Rr1vTue9oGTD0nt88F6HKZBqw6Rxu1oY-VIxb5ITIL9FQSFu1G1C",
-            "https://discordapp.com/api/webhooks/482267848262287360/URRklxg1-Vn9Ooq1OedywnE0HyizyUZLD6jv9GJ4WbPIkBJbJdmjpM3ZmXwMq_skAP1v"
+            "https://discordapp.com/api/webhooks/579703556030857247/dHl2t7_R4y0xp9XETDjOSYuZjkk-WK4esPH81K-XnQyAn4z6xqqZFGlxnm3_lYmgoOFO"
+        ]
+    },
+    "bodega": {
+        "webhook": [
+            "https://discordapp.com/api/webhooks/579704202398269440/uJSY0Biqn3LSjoCthiqfLefp9-h7lYrgyLGHgEUb97QaSE22uVZ6eSf4-qTIC4QqHh3t"
+        ]
+    },
+    "palace": {
+        "webhook": [
+            "https://discordapp.com/api/webhooks/579704110408794128/kqxbf_WZVVHeqSAmzr23tQT7Kk2sZ5xqHqyHDjAoWX2kXs2DtcVPOWKzy-tAvuxXvp_H"
         ]
     }
 }

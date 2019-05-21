@@ -4,7 +4,7 @@ from multiprocessing import Process
 import time
 
 
-file = '/Users/OverpricedFruit/proxies_aug23_fixed.txt'
+file = './proxies_check.txt'
 proxies = proxyhandler.read_proxies(file)
 sites = products.generate_sitelist()
 site = sites[0]
@@ -12,10 +12,17 @@ site = sites[0]
 def main(proxy):
     proxy_formatted = proxyhandler.proxy_parse(proxy)
     try:
+        start = time.time()
         products.List(site, proxy_formatted)
-        with open('proxies_good.txt', 'a') as f:
-            f.write(f'{proxy}\n')
-        print(proxy, ' - GOOD PROXY')
+        end = time.time()
+        time_elapsed = end - start
+        time_elapsed = time_elapsed * 1000
+        if time_elapsed < 5000:
+            with open('proxies_good_mar7.txt', 'a') as f:
+                f.write(f'{proxy}\n')
+            print(proxy, ' - GOOD PROXY')
+        else:
+            print(proxy, ' - SLOW PROXY - ', time_elapsed)
     except:
         print(proxy, ' - BAD PROXY')
 

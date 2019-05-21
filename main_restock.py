@@ -10,12 +10,10 @@ from urllib.parse import urlparse
 import re
 
 urls = []
-# logging.basicConfig(level=logging.INFO, format = '%(asctime)s: %(message)s')
-# logging.basicConfig(filename='debug.log',level=logging.DEBUG, format = '%(asctime)s: %(message)s')
+logging.basicConfig(level=logging.INFO, format = '%(asctime)s: %(message)s')
+logging.basicConfig(filename='debug.log',level=logging.DEBUG, format = '%(asctime)s: %(message)s')
 
 # get sitelist as list
-sites = products.generate_sitelist()
-
 def config():
     with open('config.json') as json_file:
         config = json.load(json_file)
@@ -25,27 +23,9 @@ def config():
 
 # executing now to prevent confusion
 tasks, delay = config()
-print(f'SHOPIFY MONITOR BY @TAQUITOSLAYER - {tasks} TASKS PER SITE WITH A DELAY OF {delay} SECONDS PER PROXY BAN')
-
-def check_if_posted(url):
-    if url in urls:
-        logging.info('PRODUCT ALREADY POSTED, IGNORING...')
-    # might actually make duplicates rofl
-    else:
-        logging.info('NEW PRODUCT BEING ADDED TO LIST TO PREVENT DUPLICATES....')
-        urls.append(url)
-        post_to_discord(url)
+print(f'SHOPIFY RESTOCK MONITOR BY @TAQUITOSLAYER - {tasks} TASKS PER SITE WITH A DELAY OF {delay} SECONDS PER PROXY BAN')
     
-
-def post_to_discord(product_url):
-    fucked = False
-    while not fucked:
-        try:
-            proxy_picked = proxyhandler.proxy()
-            title, image, _stock, price, product_url, variants = products.get_info(product_url, proxy_picked)
-            fucked = True
-        except:
-            pass
+def post_to_discord(title, image, _stock, price, product_url, variants):
     parsed_uri = urlparse(product_url)
     result = '{uri.netloc}'.format(uri=parsed_uri)
     eve_qt = 'http://remote.eve-backend.net/api/quick_task?link=' + product_url
@@ -62,60 +42,41 @@ def post_to_discord(product_url):
                 embed = Embed()
                 for webhook in webhookz:
                     client = Webhook(webhook)
+                    embed.set_thumbnail(image)
                     embed.color = 0x00FF00
-                    embed.description = f'[{title}]({product_url})'
+                    embed.description = f'[{title} has been restocked!]({product_url})'
                     price = int(price/100)
-                    embed.add_field(name='Price',value=f'${price}')
+                    embed.add_field(name='Price',value=f'${str(price)}')
                     links = []
                     for vid, titlez in variants.items():
                         links.append(f'[{titlez}](http://{result}/cart/{vid}:1)\n')
                     links = ''.join(links)
                     embed.add_field(name='Sizes Available', value=links,inline='false')
                     embed.add_field(name='Quick Tasks', value=f'[EVE]({eve_qt}) - [CYBER]({cyber_qt}) - [PD]({pd_qt}) - [TKS]({tks_qt}) - [SB]({sb_qt}) - [SWFT]({swft_qt})',inline='false')
-                    embed.set_thumbnail(image)
                     embed.set_footer(text=f'Shopify Monitor by @TaquitoSlayer | {result}')
                     client.send(embeds=[embed])
                     embed.fields.clear()
-
-def channel_fill():
-    fucked = False
-    while not fucked:
-        try:
-            proxy_picked = proxyhandler.proxy()
-            for site in sites:
-                print(site)
-                initial_product_list = products.List(site, proxy_picked)
-                for product in initial_product_list:
-                    post_to_discord(product)
-                    fucked = True
-        except Exception as e:
-            logging.info(f'SOMETHING WRONG, PROBABLY PROXY BAN - {proxy_picked} - SLEEPING FOR {delay} SECONDS: {e}')
-            print(e)
-            time.sleep(float(delay))
-            pass
-    
-
 def monitor(url, proxy, task_num):
     try:
-        initial_product_list = products.List(url, proxy)
+        title, image, stock, price, url, initial_stock_list = products.get_info(url, proxy)
     except requests.exceptions.RequestException as err:
         logging.info(f'{url.upper()} - {task_num} - {task_num}: ERROR: ' + err)
         pass
     while True:
         try:
-            new_product_list = products.List(url, proxy)
+            title, image, stock, price, url, new_stock_list = products.get_info(url, proxy)
         except requests.exceptions.RequestException as err:
             logging.info(f'{url.upper()} - {task_num} - {task_num}: ERROR: ' + err)
             pass
 
-        diff = list(set(new_product_list) - set(initial_product_list))
-
+        diff = new_stock_list.items()- initial_stock_list.items()
         if bool(diff) == True:
             logging.info(f'{url.upper()} - {task_num}: NEW PRODUCT FOUND!')
-            diff = set(diff)
-            for product in diff:
-                check_if_posted(product)
-                initial_product_list = new_product_list
+            post_to_discord(title, image, stock, price, url, diff)
+            initial_stock_list = new_stock_list
+            time.sleep(2)
+
+
         elif bool(diff) == False:
             logging.info(f'{url.upper()} - {task_num}: NO CHANGES FOUND')
             pass
@@ -137,8 +98,19 @@ def main(task_num, url, delay):
             pass
 
 
-if __name__ == '__main__':
-    for site in sites:
-        for i in range(int(tasks)):
-            p = Thread(target=main, args=(i+1, site, delay))
-            p.start() # starting workers
+def generate_skulist(textfile):
+    with open(textfile) as placeholders:
+        skus = placeholders.read().splitlines()
+    skus = list(set(skus))
+    return skus
+
+skus_m=[]
+while True:
+    skus = generate_skulist('shopify.txt')
+    for sku in skus:
+        if sku in skus_m:
+            pass
+        else:
+            for i in range(int(tasks)):
+                p = Thread(target=main, args=(i+1, sku, delay))
+                p.start() # starting workers
