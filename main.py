@@ -10,8 +10,8 @@ from urllib.parse import urlparse
 import re
 
 urls = []
-# logging.basicConfig(level=logging.INFO, format = '%(asctime)s: %(message)s')
-# logging.basicConfig(filename='debug.log',level=logging.DEBUG, format = '%(asctime)s: %(message)s')
+logging.basicConfig(level=logging.INFO, format = '%(asctime)s: %(message)s')
+logging.basicConfig(filename='debug.log',level=logging.DEBUG, format = '%(asctime)s: %(message)s')
 
 # get sitelist as list
 sites = products.generate_sitelist()
@@ -109,7 +109,6 @@ def monitor(url, proxy, task_num):
             pass
 
         diff = list(set(new_product_list) - set(initial_product_list))
-
         if bool(diff) == True:
             logging.info(f'{url.upper()} - {task_num}: NEW PRODUCT FOUND!')
             diff = set(diff)
@@ -140,5 +139,6 @@ def main(task_num, url, delay):
 if __name__ == '__main__':
     for site in sites:
         for i in range(int(tasks)):
+            print(site)
             p = Thread(target=main, args=(i+1, site, delay))
             p.start() # starting workers
